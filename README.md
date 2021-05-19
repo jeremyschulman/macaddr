@@ -1,5 +1,3 @@
 # macaddr
-# macaddr
-# macaddr
-# macaddr
-# macaddr
+=======
+For working with MAC address values
