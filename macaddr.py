@@ -51,9 +51,9 @@ class MacAddress(object):
         to_case: Optional[Callable] = None,
     ):
         """
-        Format the MAC address to the defined group size and group separator.  The default
-        settings of size=2 and sep=":" result in a MAC address format in "AA:BB:CC:DD:EE:FF"
-        notation, for example.
+        Format the MAC address to the defined group size and group separator.
+        The default settings of size=2 and sep=":" result in a MAC address
+        format in "AA:BB:CC:DD:EE:FF" notation, for example.
 
         The Caller can also use the `to_case` parameter to return the value
         using str.lower or str.upper case.  By default if `to_case` is not
@@ -88,6 +88,57 @@ class MacAddress(object):
             raise ValueError(f"Invalid size {size}, not divisible from 12")
 
         value = sep.join("".join(islice(i_chars, size)) for _ in range(chunks))
+        return value if not to_case else to_case(value)
+
+    @lru_cache
+    def format_oui(
+        self,
+        size: Optional[int] = 2,
+        sep: Optional[str] = ":",
+        to_case: Optional[Callable] = None,
+    ):
+        """
+        Format the MAC address OUI to the defined group size and group
+        separator. The default settings of size=2 and sep=":" result in a MAC
+        address format in "AA:BB:CC" notation, for example.
+
+        The Caller can also use the `to_case` parameter to return the value
+        using str.lower or str.upper case.  By default if `to_case` is not
+        provided, then the character casing will be "as-is" passed in the
+        instance constructor.
+
+        The settings/return value are cached so that future calls using the same
+        criteria are optimized.  This is a desired condition since the MAC
+        address OUI format value may be used multiple times across many usages;
+        for example when looking for a MAC address maching an OUI in multiple
+        network devices.
+
+        Parameters
+        ----------
+        size: int - The group size of the octets.
+        sep: char - The group separator.
+        to_case: Callable - should generally be str.lower or str.upper for case formatting
+
+        Returns
+        -------
+        str - the formatted MAC address OUI string.
+
+        Raises
+        ------
+        ValueError if the `size` value is > 6; i.e. the max characters in an
+        OUI; not counting the separator character.
+        """
+        i_chars = iter(self.chars)
+        chunks, rem = divmod(6, size)
+
+        if not chunks:
+            raise ValueError(f"Invalid size {size}, not <= 6")
+
+        value = sep.join("".join(islice(i_chars, size)) for _ in range(chunks))
+
+        if rem:
+            value = f'{value}{sep}{"".join(islice(i_chars, rem))}'
+
         return value if not to_case else to_case(value)
 
     def __repr__(self):
