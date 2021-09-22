@@ -30,7 +30,7 @@ from itertools import chain
 from setuptools import setup, find_packages
 
 package_name = "macaddr"
-package_version = "1.0"
+package_version = "2.0"
 
 
 with open("README.md", "r") as fh:
@@ -50,7 +50,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Jeremy Schulman",
-    py_modules=['macaddr'],
+    py_modules=["macaddr"],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",

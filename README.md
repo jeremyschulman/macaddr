@@ -38,7 +38,7 @@ You can obtain differnt formats using the `format` method.
 from macaddr import MacAddress
 
 mac = MacAddress("aabb.ccdd.eeff")
-print(mac.format(size=4, sep='-', uppercase=True))
+print(mac.format(size=4, sep='-', to_case=str.upper))
 ```
 ```shell
 AABB-CCDD-EEFF
