@@ -43,7 +43,7 @@ class MacAddress(object):
         if len(self.chars) != 12:
             raise ValueError(f"Invalid MAC address: {macaddr}")
 
-    @lru_cache
+    @lru_cache()
     def format(
         self,
         size: Optional[int] = 2,
@@ -90,7 +90,7 @@ class MacAddress(object):
         value = sep.join("".join(islice(i_chars, size)) for _ in range(chunks))
         return value if not to_case else to_case(value)
 
-    @lru_cache
+    @lru_cache()
     def format_oui(
         self,
         size: Optional[int] = 2,
